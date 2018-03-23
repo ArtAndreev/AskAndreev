@@ -1,0 +1,140 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  min-height: 100%;
+  min-width: 360px;
+  position: relative;
+}
+
+body {
+  margin-bottom: 30px; /* Margin bottom by footer height */
+}
+
+.footer {
+  background-color: #f5f5f5;
+  bottom: 0;
+  /* height: 30px; Set the fixed height of the footer here */
+  line-height: 30px; /* Vertically center the text there */
+  position: absolute;
+  width: 100%; 
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+/* header */
+
+header {
+  left: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Хедер поверх других блоков страницы */
+  line-height: 100%;
+}
+
+header .user-avatar {
+  height: 38px;
+  width: 38px;
+}
+
+header .user-avatar {
+  margin-right: 8px;
+}
+
+header form, 
+.ask-button {
+  margin-right: 16px;
+  /* margin-left: 16px; */
+}
+
+.search-bar {
+  margin-right: 0;    
+}
+
+header ul.navbar-nav li.nav-item a.user-block-dropdown {
+  padding: 0;
+}
+
+header .dropdown-menu {
+  left: auto; /* выкатить меню относительно правого края */
+  right: 0; 
+}
+
+header .sign-in-name {
+  margin-bottom: 0;
+}
+
+/* main content */
+
+main {
+  padding: 20px;
+}
+
+.site-name {
+  font-family: Palatino, URW Palladio L, serif;
+  font-weight: bold;
+}
+
+.question-list-item {
+  margin-bottom: 1rem;
+}
+
+.question-row {
+  margin: 0;
+}
+
+.question-info {
+  padding: 0;
+}
+
+.question-text {
+  padding-bottom: 15px;
+}
+
+.user-avatar {
+  max-height: 100px;
+  max-width: 100px;
+}
+
+/* sidebar */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* tags, popular */
+
+.tag-block, .popular-block {
+  /* background-color: */
+  margin-bottom: 1rem;
+}
+
+.tag-list, .popular-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;    
+}
+
+.tag, .popular {
+  font-size: 12px;
+  padding: 1px 4px;
+  margin-bottom: 4px;
+}
+
+.content .card-title {
+  margin-top: .75rem;
+}
+
+/* footer */
+
+.footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer .container div:first-child {
+  margin-right: 15px;
+}
