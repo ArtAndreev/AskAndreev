@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- content -->
+  <div class="content-header">
+    <h1>Settings: Vasya Pupkin</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-9 content">
+      <form class="settings-list">
+        <div class="form-group">
+          <label for="login">Login:</label>
+          <input type="text" class="form-control" id="login"
+                 placeholder="Your login nickname">
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email"
+                 aria-describedby="emailHelp" placeholder="Your email">
+          <small id="emailHelp" class="form-text text-muted">We'll never share
+            your email with anyone else.
+          </small>
+        </div>
+        <button class="btn btn-success my-sm-0 save-button" type="button">Save
+          changes!
+        </button>
+      </form>
+      <form id="uploadbanner" enctype="multipart/form-data" method="post"
+            action="#">
+        <label for="avatar">Avatar:</label>
+        <input type="file" class="form-control is-invalid" id="upload-avatar"
+               accept="image/*,image/jpeg">
+        <input type="submit" value="Send" id="send-avatar">
+        <div class="invalid-feedback">
+          Please input 3 or less tags
+        </div>
+      </form>
+    </div>
+    <!-- sidebar -->
+    <div class="col-md-3 sidebar">
+      {% include 'tag_block.html' %}
+      {% include 'popular_block.html' %}
+    </div>
+  </div>
+{% endblock %}
