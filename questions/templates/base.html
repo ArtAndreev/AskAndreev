@@ -49,11 +49,13 @@
             </div>
           </form>
         </li>
-        {% if user_is_signed_in %}
+        {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <button class="btn btn-success my-2 my-sm-0 ask-button"
-                    type="button">ASK QUESTION!
-            </button>
+            <a href="{% url 'ask_question' %}">
+              <button class="btn btn-success my-2 my-sm-0 ask-button"
+                      type="button">ASK QUESTION!
+              </button>
+            </a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle user-block-dropdown" href="#"
@@ -61,27 +63,24 @@
                aria-haspopup="true"
                aria-expanded="false">
               <img class="user-avatar rounded"
-                   src={% static user_avatar %} alt="user-avatar"> You
+                   src={% static request.user.UserProfile.avatar %} alt="user-avatar"> You
             </a>
             <div class="dropdown-menu"
                  aria-labelledby="navbardropdownMenuButton">
               <p class="dropdown-item disabled sign-in-name">Signed in as</p>
-              <p class="dropdown-item">{{ user_name }}</p>
+              <p class="dropdown-item">{{ request.user.first_name }} {{ request.user.last_name }}</p>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item"
-                 href="{% url 'user_settings' %}">Profile</a>
+              <a class="dropdown-item" href="{% url 'user_settings' %}">Profile</a>
               <a class="dropdown-item" href="{% url 'user_settings' %}">Settings</a>
-              <a class="dropdown-item" href="#">Log out</a>
+              <a class="dropdown-item" href="{% url 'user_logout' %}">Log out</a>
             </div>
           </li>
         {% else %}
           <li class="nav-item active">
-            <a class="nav-link" href="{% url 'user_login' %}">Sign
-              in</a>
+            <a class="nav-link" href="{% url 'user_login' %}">Sign in</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="{% url 'user_signup' %}">Sign
-              up</a>
+            <a class="nav-link" href="{% url 'user_signup' %}">Sign up</a>
           </li>
         {% endif %}
       </ul>
@@ -111,6 +110,25 @@
 <script src="{% static 'questions/js/bootstrap.min.js' %}"></script>
 <!-- icons from https://fontawesome.com -->
 <script defer src="{% static 'questions/js/fontawesome-all.js' %}"></script>
+
+<!-- push_stream -->
+<script src="{% static "questions/js/pushstream.js" %}" type="text/javascript" language="javascript" charset="utf-8"></script>
+    <script type="text/javascript" language="javascript" charset="utf-8">
+    var socket = new WebSocket('ws://127.0.0.1:8888/listen/tp_test_01');
+    socket.onopen = function(event) {
+        console.log('ws opened');
+        var data = JSON.stringify({ message: "Hello WebSocket" });
+        socket.send(data);
+    };
+    socket.onmessage = function(event) {
+        var resp = JSON.parse(event.data);
+        console.log('ws message', resp.msg);
+    };
+    socket.onclose = function(event) {
+        console.log('ws closed')
+    };
+    </script>
+
 </body>
 
 </html>

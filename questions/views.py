@@ -1,16 +1,17 @@
 # coding=utf-8
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 
-QUESTIONS = {
-    '1': {'id': 1, 'title': 'I`m your dream', 'text': 'I`m your dream, make you real'},
-    '2': {'id': 2, 'title': 'I`m your eyes', 'text': 'I`m your eyes when you must steal'},
-    '3': {'id': 3, 'title': 'I`m your pain', 'text': 'I`m your pain when you can`t feel'},
-}
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+from . import models
 
 
-def paginate(objects_list, request):
-    paginator = Paginator(objects_list, 30)
+def paginate(objects_list, per_page, request):
+    paginator = Paginator(objects_list, per_page)
     page = request.GET.get('page')
     try:
         questions = paginator.page(page)
@@ -19,61 +20,76 @@ def paginate(objects_list, request):
         questions = paginator.page(1)
     except EmptyPage:
         questions = paginator.page(paginator.num_pages)
-    return objects_page, paginator
+    return questions, paginator
 
+
+# questions
 
 def questions_list(request):
-    # if (hot)
-    contact_list = list(QUESTIONS.values())
-    paginator = Paginator(contact_list, 20)
+    qu_list = list(models.Question.objects.get_last())
+    paginator = paginate(qu_list, 10, request)  # per page fixme
 
-    page = request.GET.get('page')
-    try:
-        questions = paginator.page(page)
-    except PageNotAnInteger:
-        # В случае, GET параметр не число
-        questions = paginator.page(1)
-    except EmptyPage:
-        questions = paginator.page(paginator.num_pages)
-
-    return render(request, 'index.html', {'user_is_signed_in': True, 'questions': questions, 'user_name': 'Vasya Pupok'})
+    return render(request, 'index.html', {'index_name': 'Last questions',
+                                          'questions': paginator[0],
+                                          'paginator': paginator[1]})
 
 
 def hot_list(request):
-    contact_list = list(QUESTIONS.values())
-    paginator = Paginator(contact_list, 20)
+    qu_hot_list = list(models.Question.objects.get_hot())
+    paginator = paginate(qu_hot_list, 10, request)
 
-    page = request.GET.get('page')
+    return render(request, 'index.html', {'index_name': 'Popular questions',
+                                          'questions': paginator[0],
+                                          'paginator': paginator[1]})
+
+
+def question(request, id):
     try:
-        questions = paginator.page(page)
-    except PageNotAnInteger:
-        # В случае, GET параметр не число
-        questions = paginator.page(1)
-    except EmptyPage:
-        questions = paginator.page(paginator.num_pages)
-
-    return render(request, 'index.html', {'questions': questions})
-
-
-def question(request, question_id):
-    return render(request, 'question.html', {'question': QUESTIONS.get(question_id, {})})
+        # id = request.GET.get('id')
+        qu = models.Question.objects.get(pk=id)
+    except models.Question.DoesNotExist:
+        return HttpResponseNotFound()
+    # todo paginate
+    answers = list(models.Answer.objects.get_answers(id))
+    return render(request, 'question.html', {'qu': qu, 'answers': answers})
 
 
+@login_required(login_url=reverse_lazy('user_login'))
 def ask_question(request):
     return render(request, 'ask.html', {'tag_name': 'ha'})
 
 
 def tag_list(request, tag_name):
-    return render(request, 'tag.html', {'tag_name': tag_name})
+    qu_tag_list = list(models.Question.objects.get_by_tag(tag_name))
+    paginator = paginate(qu_tag_list, 10, request)
 
+    return render(request, 'index.html', {'questions': paginator[0],
+                                          'paginator': paginator[1],
+                                          'index_name': '#' + tag_name})
+
+
+# user
 
 def user_login(request):
-    return render(request, 'login.html', {'tag_name': 'zs'})
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('questions_list'))
+    user = authenticate(request)
+    if user is None:  # failure
+        return HttpResponseRedirect(reverse('user_login'))
+    else:
+        return HttpResponseRedirect(reverse('questions_list'))
 
 
+def user_logout(request):
+    pass
+
+
+@login_required(login_url=reverse_lazy('user_login'))
 def user_settings(request):
     return render(request, 'settings.html', {'tag_name': 'zs'})
 
 
 def user_signup(request):
+    if request.user.is_authenticated:
+        return questions_list(request)
     return render(request, 'signup.html', {'tag_name': 'za'})

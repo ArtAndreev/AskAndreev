@@ -1,0 +1,31 @@
+<div class="question-list-item">
+        <div class="row question-row">
+          <div class="col-md-4 card border-primary question-info">
+            <div class="card-body">
+              <img class="user-avatar rounded"
+                   src="../../static/questions/img/100.jpg" alt="user-avatar"> {% comment %} todo: kill hardcode {% endcomment %}
+              <h5 class="card-title">{{ qu.author.user.username }}</h5>
+              <p class="card-text tag-list">
+                {# Tags: #}
+                {% for tag in qu.tags.all %}
+                <span class="border rounded tag">
+                  <a href="{% url 'tag_list' tag.label %}" class="card-text">{{ tag.label }}</a> {% comment %} todo hardcode {% endcomment %}
+                </span>
+                {% endfor %}
+              </p>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-success">+</button>
+                <button type="button" class="btn btn-light" disabled>{{ qu.rating }}
+                </button>
+                <button type="button" class="btn btn-danger">-</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 card border-primary question-text">
+            <h5 class="card-title"><a href="{% url 'question' qu.id %}">{{ qu.title }}</a></h5>
+            <p class="card-text">
+              {{ qu.text }}
+            </p>
+          </div>
+        </div>
+</div>

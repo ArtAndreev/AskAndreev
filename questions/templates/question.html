@@ -7,80 +7,15 @@
   </div>
   <div class="row">
     <div class="col-md-9 content">
-      <div class="question-list-item">
-        <div class="row question-row">
-          <div class="col-md-4 card border-primary question-info">
-            <div class="card-body">
-              <img class="user-avatar rounded"
-                   src="../../static/questions/img/100.jpg" alt="user-avatar">
-              <h5 class="card-title">User</h5>
-              <p class="card-text tag-list">
-                Tags:
-                <span class="border rounded tag">
-                    <a href="#" class="card-text">random tag</a>
-                  </span>
-                <span class="border rounded tag">
-                    <a href="#" class="card-text">lorem</a>
-                  </span>
-                <span class="border rounded tag">
-                    <a href="#" class="card-text">lorem ipsum dolor</a>
-                  </span>
-              </p>
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-success">+</button>
-                <button type="button" class="btn btn-light" disabled>323
-                </button>
-                <button type="button" class="btn btn-danger">-</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8 card border-primary question-text">
-            <h5 class="card-title">To be or not to be</h5>
-            <p class="card-text">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius,
-              consectetur odit nulla inventore cum ab ducimus neque laborum
-              pariatur perferendis rem omnis, voluptatum deleniti. Veniam illo
-              eum fugiat eveniet qui.
-            </p>
-            <p class="card-text">
-              Answers:
-              <a href="#" class="card-text">666</a>
-            </p>
-          </div>
-        </div>
-      </div>
+      {% include 'question_item.html' %}
       <h1>Answers</h1>
-      <div class="answer-list-item">
-        <div class="row answer-row">
-          <div class="col-md-4 card border-primary answer-info">
-            <div class="card-body">
-              <img class="user-avatar rounded"
-                   src="../../static/questions/img/100.jpg" alt="user-avatar">
-              <h5 class="card-title">User</h5>
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-success">+</button>
-                <button type="button" class="btn btn-light" disabled>323
-                </button>
-                <button type="button" class="btn btn-danger">-</button>
-              </div>
-              <div class="custom-control custom-checkbox answer-correct">
-                <input type="checkbox" class="custom-control-input"
-                       id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">It's
-                  correct!</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8 card border-primary answer-text">
-            <p class="card-text">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius,
-              consectetur odit nulla inventore cum ab ducimus neque laborum
-              pariatur perferendis rem omnis, voluptatum deleniti. Veniam illo
-              eum fugiat eveniet qui.
-            </p>
-          </div>
-        </div>
-      </div>
+      {% for answer in answers %}
+        {% include 'answer_item.html' %}
+        {% empty %}
+        <p class="card-text">
+        No answers available. Be first!
+        </p>
+      {% endfor %}
       <nav aria-label="page navigation">
         <ul class="pagination justify-content-center">
           <li class="page-item disabled">
